@@ -1,0 +1,174 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc-dev
+  namespace: dev
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    app.kubernetes.io/name: backend-deployment
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: dev
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: backend-deployment
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: backend-deployment
+    spec:
+      containers:
+      - name: backend-deployment
+        image: eu.gcr.io/prj-ext-prod-faang-gcp-dr/dcc-validate-metadata/backend-embassy-cloud:latest
+        command: ['/bin/bash', 'run_uvicorn.sh']
+        ports:
+        - containerPort: 8000
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: user
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: password
+          - name: FIRE_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: fire_username
+          - name: FIRE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: fire_password
+          - name: BOVREG_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_ena_username
+          - name: BOVREG_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_ena_password
+          - name: BOVREG_BIOSAMPLES_USERNAME_TEST
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_username_test
+          - name: BOVREG_BIOSAMPLES_PASSWORD_TEST
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_password_test
+          - name: BOVREG_BIOSAMPLES_USERNAME_PROD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_username_prod
+          - name: BOVREG_BIOSAMPLES_PASSWORD_PROD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: bovreg_biosamples_password_prod
+          - name: TRACKHUBS_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: username
+          - name: TRACKHUBS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: password
+          - name: EMAIL_HOST_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: email-host-credentials
+                key: email_host_user
+          - name: EMAIL_HOST_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: email-host-credentials
+                key: email_host_password
+          - name: EMAIL_HOST
+            valueFrom:
+              secretKeyRef:
+                name: email-host-credentials
+                key: email_host
+          - name: EMAIL_PORT
+            valueFrom:
+              secretKeyRef:
+                name: email-host-credentials
+                key: email_port
+          - name: ES_USER
+            valueFrom:
+              secretKeyRef:
+                name: gcp-es-credentials
+                key: es_user
+          - name: ES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: gcp-es-credentials
+                key: es_password
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: secret_key
+          - name: POSTGRES_HOST
+            value: postgres-service.default.svc.cluster.local
+          - name: SLACK_WEBHOOK
+            valueFrom:
+              secretKeyRef:
+                name: trackhubs-credentials
+                key: slack_webhook
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: access_key
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: aws-credentials
+                key: secret_key
+          - name: MINIO_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-credentials
+                key: access_key
+          - name: MINIO_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: minio-credentials
+                key: secret_key
+        volumeMounts:
+          - name: data
+            mountPath: /data
+          - name: files
+            mountPath: "/usr/share/nginx/html"
+      imagePullSecrets:
+        - name: regcred
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: validation-pvc
+        - name: files
+          persistentVolumeClaim:
+            claimName: local-storage-pvc
