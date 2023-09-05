@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ssh-server-pod-test
+  namespace: dev
+spec:
+  containers:
+  - name: dcc-dev-local
+    image: milm/dcc-dev-img:latest
+    ports:
+    - containerPort: 22
+    resources:
+      limits:
+        memory: "4Gi"
+      requests:
+        memory: "4Gi"

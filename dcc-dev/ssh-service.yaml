@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ssh-server
+  namespace: dev
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ssh
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: ssh-pod
+    
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ssh-server-pod
+  namespace: dev
+  labels:
+    app.kubernetes.io/name: ssh
+spec:
+  containers:
+  - name: dcc-dev-local
+    image: milm/dcc-dev-img:latest
+    ports:
+    - containerPort: 22
+      name: ssh-pod
+    resources:
+      limits:
+        memory: "4Gi"
+      requests:
+        memory: "4Gi"
