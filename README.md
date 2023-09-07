@@ -1,16 +1,16 @@
 # dcc-dev-environment
 
-## Get credentials from the default namespace
+## Get credentials from the default namespace and change their namespace to 'dev'
 ```bash
-kubectl get secret postgres-credentials -n default -o yaml > credentials_postgres.yaml
-kubectl get secret trackhubs-credentials -n default -o yaml > credentials_trackhubs.yaml
-kubectl get secret email-host-credentials -n default -o yaml > credentials_email-host.yaml
-kubectl get secret gcp-es-credentials -n default -o yaml > credentials_gcp-es.yaml
-kubectl get secret aws-credentials -n default -o yaml > credentials_aws.yaml
-kubectl get secret minio-credentials -n default -o yaml > credentials_minio.yaml
+kubectl get secret postgres-credentials -n default -o yaml | sed 's#namespace: default#namespace: dev#' > ./credentials/credentials_postgres.yaml
+kubectl get secret trackhubs-credentials -n default -o yaml | sed 's#namespace: default#namespace: dev#' > ./credentials/credentials_trackhubs.yaml
+kubectl get secret email-host-credentials -n default -o yaml | sed 's#namespace: default#namespace: dev#' > ./credentials/credentials_email-host.yaml
+kubectl get secret gcp-es-credentials -n default -o yaml | sed 's#namespace: default#namespace: dev#' > ./credentials/credentials_gcp-es.yaml
+kubectl get secret aws-credentials -n default -o yaml | sed 's#namespace: default#namespace: dev#' > ./credentials/credentials_aws.yaml
+kubectl get secret minio-credentials -n default -o yaml | sed 's#namespace: default#namespace: dev#' > ./credentials/credentials_minio.yaml
 ```
 
-## Change the namespace to 'dev' and apply files for your 'dev'-namespace
+## Apply files for your 'dev'-namespace
 ```bash
 kubectl apply -f ./credentials_postgres.yaml
 kubectl apply -f ./credentials_trackhubs.yaml

@@ -15,5 +15,7 @@ RUN pip install -r requirements.txt
 RUN pip install --upgrade awscli
 ENV PYTHONUNBUFFERED=1
 
+COPY ./credentials /credentials
+
 # CMD ["python", "-c", "while True: pass"]
 CMD ["/usr/sbin/sshd", "-D", "-e"]
