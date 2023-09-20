@@ -25,4 +25,4 @@ kubectl apply -f ssh-service.yaml
 # kubectl port-forward -n dev ssh-server-pod 2222:22
 # ssh -p 2222 sshuser@localhost -i ~/.ssh/idkey
 
-# ssh -p 8000 sshuser@45.88.81.193 -i ~/.ssh/idkey
+# ssh -p 8000 sshuser@45.88.81.194 -i ~/.ssh/idkey

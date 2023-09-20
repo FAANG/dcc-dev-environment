@@ -8,10 +8,15 @@ spec:
   selector:
     app.kubernetes.io/name: ssh
   ports:
-  - port: 8000
+  - name: ssh-port
+    port: 8000
     protocol: TCP
-    targetPort: ssh-pod
-    
+    targetPort: ssh-port
+  - name: django-port
+    port: 8001
+    protocol: TCP
+    targetPort: django-port
+
 ---
 
 apiVersion: v1
@@ -27,7 +32,9 @@ spec:
     image: milm/dcc-dev-img:latest
     ports:
     - containerPort: 22
-      name: ssh-pod
+      name: ssh-port
+    - containerPort: 8001
+      name: django-port
     resources:
       limits:
         memory: "4Gi"
