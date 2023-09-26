@@ -12,10 +12,18 @@ spec:
     port: 8000
     protocol: TCP
     targetPort: ssh-port
-  - name: django-port
+  - name: django-port-01
     port: 8001
     protocol: TCP
-    targetPort: django-port
+    targetPort: django-port-01
+  - name: django-port-02
+    port: 8002
+    protocol: TCP
+    targetPort: django-port-02
+  - name: django-port-03
+    port: 8003
+    protocol: TCP
+    targetPort: django-port-03
 
 ---
 
@@ -34,7 +42,11 @@ spec:
     - containerPort: 22
       name: ssh-port
     - containerPort: 8001
-      name: django-port
+      name: django-port-01
+    - containerPort: 8002
+      name: django-port-02
+    - containerPort: 8003
+      name: django-port-03
     resources:
       limits:
         memory: "4Gi"
