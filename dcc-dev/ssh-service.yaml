@@ -63,6 +63,15 @@ spec:
           secretKeyRef:
             name: postgres-credentials
             key: password
+      - name: POSTGRES_HOST
+        value: postgres-service.default.svc.cluster.local
+      - name: SECRET_KEY
+        valueFrom:
+          secretKeyRef:
+            name: postgres-credentials
+            key: secret_key
+      - name: REDIS_HOST
+        value: redis-svc.default.svc.cluster.local
       - name: FIRE_USERNAME
         valueFrom:
           secretKeyRef:
@@ -113,6 +122,11 @@ spec:
           secretKeyRef:
             name: trackhubs-credentials
             key: password
+      - name: SLACK_WEBHOOK
+        valueFrom:
+          secretKeyRef:
+            name: trackhubs-credentials
+            key: slack_webhook
       - name: EMAIL_HOST_USERNAME
         valueFrom:
           secretKeyRef:
@@ -143,18 +157,6 @@ spec:
           secretKeyRef:
             name: gcp-es-credentials
             key: es_password
-      - name: SECRET_KEY
-        valueFrom:
-          secretKeyRef:
-            name: postgres-credentials
-            key: secret_key
-      - name: POSTGRES_HOST
-        value: postgres-service.default.svc.cluster.local
-      - name: SLACK_WEBHOOK
-        valueFrom:
-          secretKeyRef:
-            name: trackhubs-credentials
-            key: slack_webhook
       - name: AWS_ACCESS_KEY_ID
         valueFrom:
           secretKeyRef:
