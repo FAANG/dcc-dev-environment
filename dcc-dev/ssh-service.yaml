@@ -71,7 +71,7 @@ spec:
             name: postgres-credentials
             key: secret_key
       - name: REDIS_HOST
-        value: redis-svc.default.svc.cluster.local
+        value: redis-svc
       - name: FIRE_USERNAME
         valueFrom:
           secretKeyRef:
