@@ -15,5 +15,8 @@ RUN pip install -r requirements.txt
 RUN pip install --upgrade awscli
 ENV PYTHONUNBUFFERED=1
 
+RUN apt-get install nano
+RUN apt-get install lsof
+
 # CMD ["python", "-c", "while True: pass"]
 CMD ["/usr/sbin/sshd", "-D", "-e"]
